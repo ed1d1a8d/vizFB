@@ -1,3 +1,5 @@
+#! /usr/bin/env python2.7-32
+
 import facebook
 import json
 import tulip_facebook
