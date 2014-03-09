@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<link rel="shortcut icon" href="../../assets/ico/favicon.ico">
+
+		<!-- Bootstrap core CSS -->
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+	</head>
+
+	<div id="fb-root"></div>
+
+	<!-- Facebook Scripts -->
+	<!-- Code taken from the Facebook API example at https://developers.facebook.com/docs/facebook-login/login-flow-for-web -->
+	<script>
+		window.fbAsyncInit = function() {
+			FB.init({
+				appId: '1426519970926532',
+				status: true, // check login status
+				cookie: true, // enable cookies to allow the server to access the session
+				xfbml: true	// parse XFBML
+			});
+		};
+
+		// Load the SDK asynchronously
+		(function(d){
+		 	var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+		 	if (d.getElementById(id)) {return;}
+		 	js = d.createElement('script'); js.id = id; js.async = true;
+		 	js.src = "//connect.facebook.net/en_US/all.js";
+		 	ref.parentNode.insertBefore(js, ref);
+		}(document)); 
+	</script>
+
+	<body>
+		<div class="container">
+			<div class="navbar navbar-default" role="navigation">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="index.html">vizFB</a>
+					</div><!--/.navbar-header -->
+
+					<div class="navbar-collapse collapse">
+						<ul class="nav navbar-nav">
+							<li><a href="index.html">Home</a></li>
+							<li><a href="example.html">Example</a></li>
+							<li class="active"><a href="graph.html">Try It Out</a></li>
+							<li><a href="about.html">About</a></li>
+						</ul>
+					</div><!--/.nav-collapse -->
+				</div><!--/.container-fluid -->
+			</div><!--/.navbar navbar-default -->
+		
+			<div class="jumbotron" id="jumbo">
+				<h1>Create a graph with your own friends!</h1>
+
+				<!--type="submit" formaction="button.py/nextbutton" formmethod="POST" -->
+				<p>
+					Provide us with access to your Facebook data to get started:
+					<button id="button1" class="btn btn-primary btn-lg">Authorize with Facebook</button>
+				</p>
+			</div>
+		</div><!--/.container -->
+
+		<!-- Bootstrap core JavaScript
+		================================================== -->
+		<!-- Placed at the end of the document so the pages load faster -->
+		<script src="js/jquery.js"></script>
+		<script>
+			function disable(i){
+    			$("#rbutton_"+i).prop("disabled",true);
+			}
+
+			var generatedGraph = false;
+			$( document ).ready(function() {
+					$( "#button1" ).click(function( event ) {
+					    FB.login(function(response) {
+							if (response.authResponse) {
+					            console.log('User just logged in.');
+					            var access_token = response.authResponse.accessToken; //get access token
+					            var user_id = response.authResponse.userID; //get FB UID
+
+					            $( "#button1" ).prop("disabled", true);
+
+	        				    $( "#jumbo" ).append( "<p>Great! Now that we have access to your social network's inner workings, we can generate a graph for your friends. This might take a while, so please be patient. Click here to have your graph generated: <button id=\"button2\" class=\"btn btn-primary btn-lg\">Generate My Graph</button></p>" );
+
+	        				    $( "#button2" ).click(function( event ) {
+									console.log('Button2 pressed');
+									var graph = $.post( "scripts/graph.py/getgraph", {token: access_token}, "json");
+									generatedGraph = true;
+								});
+					        } else {
+					            console.log('Why no log in :(');
+					        }
+					    }, {
+					        scope: 'read_stream'
+					    });
+				});
+			});
+			
+			window.onbeforeunload = function() {
+				if(generatedGraph) {
+					return "Leaving this page means the data will have to be collected and generated again.";
+    			}
+			}
+		</script>		
+
+		<script src="js/bootstrap.min.js"></script>
+	</body>
+</html>
