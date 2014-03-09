@@ -35,28 +35,24 @@ function nodeClick(id){
 			t=edges[alist[id][i][1]].mfriends;
 			prev.paths[i].attr({stroke: "rgb("+(t/8.0)*255+","+(t/8.0)*255+","+(t/8.0)*255+")"});
 		}
-		if(prev.box!=null) prev.box.remove()
-		prev.box=paper.rect(nodes[id].x-200, nodes[id].y-150, 200, 150)
+		if(prev.box!=null) prev.box.remove();
+		if(prev.button!=null) prev.button.remove();
+		prev.button=paper.rect(nodes[id].x-140+15, nodes[id].y-195+100, 80, 50)
+		
+		prev.box=paper.rect(nodes[id].x-140, nodes[id].y-195, 140, 180)
 		prev.box.attr({fill: "rgb(225, 225, 225)", stroke: "rgb(100, 100, 100)"})
 		if(prev.boxname!=null) prev.boxname.remove();
-		prev.boxname=paper.print(nodes[id].x-200+20, nodes[id].y-150+20, nodes[id].name, paper.getFont("Cabin"))
+		prev.boxname=paper.print(nodes[id].x-140+15, nodes[id].y-195+20, nodes[id].name, paper.getFont("Cabin"))
 		
-		prev.box.hover(function(){
-		prev.box.attr({opacity: .2});
-		if(prev.boxpic!=null) prev.boxpic.attr({opacity: .2});
-		}, function(){
-		prev.box.attr({opacity: 1});
-		prev.boxpic.attr({opacity: 1});})
+		prev.box.hover(function(){ prev.box.attr({opacity: .2}); if(prev.boxpic!=null) prev.boxpic.attr({opacity: .2});},
+		function(){ prev.box.attr({opacity: 1}); prev.boxpic.attr({opacity: 1}); });
 		
 		if(prev.boxpic!=null) prev.boxpic.remove();
-		prev.boxpic=paper.image(nodes[id].pic, nodes[id].x-200+40, nodes[id].y-150+40, 75, 75)
+		prev.boxpic=paper.image(nodes[id].pic, nodes[id].x-140+20, nodes[id].y-195+40, 75, 75)
 		
-		prev.boxpic.hover(function(){
-		prev.box.attr({opacity: .2});
-		if(prev.boxpic!=null) prev.boxpic.attr({opacity: .2});
-		}, function(){
-		prev.box.attr({opacity: 1});
-		prev.boxpic.attr({opacity: 1});});
+		prev.boxpic.hover(function(){ prev.box.attr({opacity: .2}); if(prev.boxpic!=null) prev.boxpic.attr({opacity: .2});},
+		function(){ prev.box.attr({opacity: 1}); prev.boxpic.attr({opacity: 1}); });
+		prev.box.attr({"fill": "rgb(225,225,225)", "stroke": "rgb(100, 100, 100)"})
 	}
 }
 
@@ -69,7 +65,7 @@ function nodeHover(id){
 		var tEdge=paper.set();
 		
 		//console.log(prev.id, id)
-		dNode[prev.id].attr({fill : nodes[prev.id].viewColor, transform: "s1"}); 
+		dNode[prev.id].attr({fill : nodes[prev.id].color, transform: "s1"}); 
 		if(prev.name!=null) prev.name.remove();
 		if(prev.pic!=null) prev.pic.remove();
 		
@@ -105,7 +101,6 @@ window.onload = function() {
 		maxY=Math.max(maxX, nodes[i].y);
 		minY=Math.min(minY, nodes[i].y);
 	}
-	console.log(minX, maxX, minY, maxY)
 	var xOff, yOff, mult;
 	xOff=Math.abs(minX)+50;
 	yOff=Math.abs(minY)+50;
@@ -148,10 +143,10 @@ window.onload = function() {
 		t.hide();
 		names.push(t);*/
 		//console.log(names.length);
-		nodes[i].viewColor="rgb(0,51,102,255)";
+		//nodes[i].viewColor="rgb(0,51,102,255)";
 		
 		dNode.push(paper.circle(nodes[i].x, nodes[i].y, 3));
-		dNode[i].attr({fill: nodes[i].viewColor, "stroke-width": .1});
+		dNode[i].attr({fill: nodes[i].color, "stroke-width": .1});
 		dNode[i].hover(nodeHover(i));
 		dNode[i].click(nodeClick(i));
 
