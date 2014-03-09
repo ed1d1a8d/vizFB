@@ -10,10 +10,31 @@
 
 		<!-- Bootstrap core CSS -->
 		<link href="css/bootstrap.min.css" rel="stylesheet">
-
-		<!-- Custom styles for this template -->
-		<link href="css/navbar.css" rel="stylesheet">
 	</head>
+
+	<div id="fb-root"></div>
+
+	<!-- Facebook Scripts -->
+	<!-- Code taken from the Facebook API example at https://developers.facebook.com/docs/facebook-login/login-flow-for-web -->
+	<script>
+		window.fbAsyncInit = function() {
+			FB.init({
+				appId: '1426519970926532',
+				status: true, // check login status
+				cookie: true, // enable cookies to allow the server to access the session
+				xfbml: true	// parse XFBML
+			});
+		};
+
+		// Load the SDK asynchronously
+		(function(d){
+		 	var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+		 	if (d.getElementById(id)) {return;}
+		 	js = d.createElement('script'); js.id = id; js.async = true;
+		 	js.src = "//connect.facebook.net/en_US/all.js";
+		 	ref.parentNode.insertBefore(js, ref);
+		}(document)); 
+	</script>
 
 	<body>
 		<div class="container">
@@ -41,16 +62,42 @@
 				</div><!--/.container-fluid -->
 			</div><!--/.navbar navbar-default -->
 		
-			<div class="jumbotron">
-				<h1>This is our Graph Page!</h1>
-				<p>We're still working on this.</p>
+			<div class="jumbotron" id="jumbo">
+				<h1>Create a graph with your own friends!</h1>
+
+				<!--type="submit" formaction="button.py/nextbutton" formmethod="POST" -->
+				<p>
+					Provide us with access to your Facebook data to get started:
+					<button id="button1" class="btn btn-primary btn-lg">Authorize with Facebook</button>
+				</p>		
 			</div>
 		</div><!--/.container -->
 
 		<!-- Bootstrap core JavaScript
 		================================================== -->
 		<!-- Placed at the end of the document so the pages load faster -->
-		<script src="jquery.js"></script>
+		<script src="js/jquery.js"></script>
+		<script>
+			$( document ).ready(function() {
+				$( "#button1" ).click(function( event ) {
+					var access_token, user_id;
+				    FB.login(function(response) {
+						if (response.authResponse) {
+				            console.log('User just logged in.');
+				            access_token = response.authResponse.accessToken; //get access token
+				            user_id = response.authResponse.userID; //get FB UID
+				        } else {
+				            console.log('Why no log in :(');
+				        }
+				    }, {
+				        scope: 'read_stream'
+				    });
+
+				    /*Now do something with the access_token -->*/
+				});
+			});
+		</script>
+
 		<script src="js/bootstrap.min.js"></script>
 	</body>
 </html>
