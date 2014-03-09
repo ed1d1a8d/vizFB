@@ -82,23 +82,23 @@
     			$("#rbutton_"+i).prop("disabled",true);
 			}
 
-			var access_token, user_id;
+			var generatedGraph = false;
 			$( document ).ready(function() {
 					$( "#button1" ).click(function( event ) {
 					    FB.login(function(response) {
 							if (response.authResponse) {
 					            console.log('User just logged in.');
-					            access_token = response.authResponse.accessToken; //get access token
-					            user_id = response.authResponse.userID; //get FB UID
+					            var access_token = response.authResponse.accessToken; //get access token
+					            var user_id = response.authResponse.userID; //get FB UID
 
 					            $( "#button1" ).prop("disabled", true);
 
 	        				    $( "#jumbo" ).append( "<p>Great! Now that we have access to your social network's inner workings, we can generate a graph for your friends. This might take a while, so please be patient. Click here to have your graph generated: <button id=\"button2\" class=\"btn btn-primary btn-lg\">Generate My Graph</button></p>" );
 
-	        				    var graph;
 	        				    $( "#button2" ).click(function( event ) {
 									console.log('Button2 pressed');
-									graph = $.post( "scripts/getgraph.py", {token: access_token}, "json");
+									var graph = $.post( "scripts/graph.py/getgraph", {token: access_token}, "json");
+									generatedGraph = true;
 								});
 					        } else {
 					            console.log('Why no log in :(');
@@ -108,8 +108,12 @@
 					    });
 				});
 			});
-
 			
+			window.onbeforeunload = function() {
+				if(generatedGraph) {
+					return "Leaving this page means the data will have to be collected and generated again.";
+    			}
+			}
 		</script>		
 
 		<script src="js/bootstrap.min.js"></script>
