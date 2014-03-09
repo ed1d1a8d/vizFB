@@ -7,7 +7,13 @@
 		<meta name="description" content="">
 		<meta name="author" content="">
 		<link rel="shortcut icon" href="../../assets/ico/favicon.ico">
-
+		<script type="text/javascript" src="scripts/json.js"></script>
+		<script type="text/javascript" src="js/raphael.js"></script>
+		<script type="text/javascript" src="js/jquery.js"></script>
+		<script type="text/javascript" src="scripts/raphael.export.js"></script>
+		<script type="text/javascript" src="scripts/canvg.js"></script>
+		<script type="text/javascript" src="js/Raphael_Cabin_400.js"></script>
+		
 		<!-- Bootstrap core CSS -->
 		<link href="css/bootstrap.min.css" rel="stylesheet">
 	</head>
@@ -24,7 +30,7 @@
 							<span class="icon-bar"></span>
 							<span class="icon-bar"></span>
 						</button>
-						<a class="navbar-brand" href="index.html"><img src="icons/vizlogo.png" width="69" height="25"></a>
+						<a class="navbar-brand" href="index.html"><img src="icons/vizlogo.png" width=50 height=50> </img></a>
 					</div><!--/.navbar-header -->
 
 					<div class="navbar-collapse collapse">
@@ -41,13 +47,30 @@
 			<div class="jumbotron">
 				<h1>This is the Example Page!</h1>
 				<p>Eventually, we will show you how to use this application. But for now, we need to work on other stuff.</a></p>
+				<style type="text/css">
+			#canvas_container {
+				width: 1000px;
+				border: 1px solid #aaa;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="canvas_container"></div>
+		<canvas id="myCanvas" style="display:none;"></canvas>
+	</body>
+	<script type="text/javascript"> 	
+		var paper = new Raphael(document.getElementById('canvas_container'), 1000, 1000);
+	</script>
+	<img id="myImg" src="">
+      </div>
 			</div>
 		</div><!--/.container -->
 
 		<!-- Bootstrap core JavaScript
 		================================================== -->
 		<!-- Placed at the end of the document so the pages load faster -->
-		<script src="js/jquery.js"></script>
+		
+		<script src="scripts/disp_graph.js"></script>
 		<script src="js/bootstrap.min.js"></script>
 	</body>
 </html>
