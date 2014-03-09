@@ -69,7 +69,7 @@
 				<p>
 					Provide us with access to your Facebook data to get started:
 					<button id="button1" class="btn btn-primary btn-lg">Authorize with Facebook</button>
-				</p>		
+				</p>
 			</div>
 		</div><!--/.container -->
 
@@ -78,25 +78,39 @@
 		<!-- Placed at the end of the document so the pages load faster -->
 		<script src="js/jquery.js"></script>
 		<script>
-			$( document ).ready(function() {
-				$( "#button1" ).click(function( event ) {
-					var access_token, user_id;
-				    FB.login(function(response) {
-						if (response.authResponse) {
-				            console.log('User just logged in.');
-				            access_token = response.authResponse.accessToken; //get access token
-				            user_id = response.authResponse.userID; //get FB UID
-				        } else {
-				            console.log('Why no log in :(');
-				        }
-				    }, {
-				        scope: 'read_stream'
-				    });
+			function disable(i){
+    			$("#rbutton_"+i).prop("disabled",true);
+			}
 
-				    /*Now do something with the access_token -->*/
+			var access_token, user_id;
+			$( document ).ready(function() {
+					$( "#button1" ).click(function( event ) {
+					    FB.login(function(response) {
+							if (response.authResponse) {
+					            console.log('User just logged in.');
+					            access_token = response.authResponse.accessToken; //get access token
+					            user_id = response.authResponse.userID; //get FB UID
+
+					            $( "#button1" ).prop("disabled", true);
+
+	        				    $( "#jumbo" ).append( "<p>Great! Now that we have access to your social network's inner workings, we can generate a graph for your friends. This might take a while, so please be patient. Click here to have your graph generated: <button id=\"button2\" class=\"btn btn-primary btn-lg\">Generate My Graph</button></p>" );
+
+	        				    var graph;
+	        				    $( "#button2" ).click(function( event ) {
+									console.log('Button2 pressed');
+									graph = $.post( "scripts/getgraph.py", {token: access_token}, "json");
+								});
+					        } else {
+					            console.log('Why no log in :(');
+					        }
+					    }, {
+					        scope: 'read_stream'
+					    });
 				});
 			});
-		</script>
+
+			
+		</script>		
 
 		<script src="js/bootstrap.min.js"></script>
 	</body>
